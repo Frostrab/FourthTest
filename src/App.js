@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import Login from './page/Login/Login'
+import Overview from './page/Overview/Overview'
+import PrivateRoute  from './components/PrivateRoute'
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
 
-function App() {
+import { AuthContext } from './context/auth';
+import './App.css';
+import LayoutItem from './components/Layoutitem';
+
+function App ()  {
+  const [authTokens, setAuthTokens] = useState()
+  const setTokens = data => {
+    setAuthTokens(data)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
+ 
+    <BrowserRouter>
+    <Switch>
+      <PrivateRoute compoenent={Overview} path="/Overview" />
+     
+      <Route component={Login} path="/" exact/>
+    </Switch>
+    </BrowserRouter>
+    </AuthContext.Provider>
   );
 }
 
